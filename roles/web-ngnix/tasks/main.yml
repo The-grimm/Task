@@ -3,6 +3,8 @@
 vars:
 nginx_conf_template: templates/index.html.j2
 nginx_conf_file_path: /usr/share/nginx/www/index.html
+nginx_index_template: templates/index.html.j2
+nginx_index_file_path: /usr/share/nginx/www/index.html
 nginx_ppa_version: stable
 nginx_ppa_use: false
 
@@ -25,14 +27,22 @@ tasks:
     state: absent
   when: nginx_ppa_added.changed
   
-- name: Copy nginx configuration in place.
+- name: Copy index file.
+  template:
+    src: "{{ nginx_index_template }}"
+    dest: "{{ nginx_index_file_path }}"
+    owner: root
+    group: root
+    mode: 0644
+
+  - name: Copy conf file.
   template:
     src: "{{ nginx_conf_template }}"
     dest: "{{ nginx_conf_file_path }}"
     owner: root
     group: root
     mode: 0644
-  notify:     #handler
+  notify:     
     - reload nginx
 
 - name: Ensure nginx is started and enabled to start at boot.
