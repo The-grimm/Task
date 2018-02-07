@@ -1,14 +1,14 @@
 ---
 - include: aws-codedeploy.yml
 vars:
-nginx_conf_template: static_files/index.html
-nginx_conf_file_path: /usr/share/nginx/www/
-root_group: root
+nginx_conf_template: templates/index.html.j2
+nginx_conf_file_path: /usr/share/nginx/www/index.html
 nginx_ppa_version: stable
+nginx_ppa_use: false
 
 handlers:
 -name : reload nginx
-  servive: name=nginx state=restarted
+  servive: name=nginx state=reloaded
   
 tasks:
 - name: Add PPA for Nginx.
@@ -30,7 +30,7 @@ tasks:
     src: "{{ nginx_conf_template }}"
     dest: "{{ nginx_conf_file_path }}"
     owner: root
-    group: "{{ root_group }}"
+    group: root
     mode: 0644
   notify:     #handler
     - reload nginx
