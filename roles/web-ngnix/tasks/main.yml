@@ -1,3 +1,38 @@
 ---
+vars:
+nginx_conf_template: static_files/index.html
+nginx_conf_file_path: /usr/share/nginx/www/
+root_group: root
+nginx_ppa_version: stable
 
+handlers:
+-name : reload nginx
+  servive: name=nginx state=restarted
+  
 tasks:
+- name: Add PPA for Nginx.
+  apt_repository:
+    repo: 'ppa:nginx/{{ nginx_ppa_version }}'
+    state: present
+    update_cache: yes
+  register: nginx_ppa_added
+  when: nginx_ppa_use
+
+- name: Ensure nginx will reinstall if the PPA was just added.
+  apt:
+    name: nginx
+    state: absent
+  when: nginx_ppa_added.changed
+  
+- name: Copy nginx configuration in place.
+  template:
+    src: "{{ nginx_conf_template }}"
+    dest: "{{ nginx_conf_file_path }}"
+    owner: root
+    group: "{{ root_group }}"
+    mode: 0644
+  notify:     #handler
+    - reload nginx
+
+- name: Ensure nginx is started and enabled to start at boot.
+  service: name=nginx state=started enabled=yes
