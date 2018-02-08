@@ -32,9 +32,17 @@ resource "aws_security_group" "ubuntu_nginx" {
   tags {
     Name = "ubuntu-nginx"
   }
-
-resource "aws_instance" "example" {
-  ami           = "ami-2757f631"
-  instance_type = "t2.micro"
+ }
+resource "aws_instance" "nginx" {
+  ami           = ""
+  instance_type = ""
+  associate_public_ip_address = true
+  security_groups = ["ubuntu_nginx"]
+  key_name = "{var.key_name}"
+    tags {
+    Name = "ubuntu-nginx"
   }
+  
+  output "ip" {
+    value = "${aws_instance.nginx.public_ip}"
 }
