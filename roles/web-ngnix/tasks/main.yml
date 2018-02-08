@@ -47,3 +47,9 @@
 
 - name: Ensure nginx is started and enabled to start at boot.
   service: name=nginx state=started enabled=yes
+ 
+- cron:
+    name: "check dirs"
+    minute: "0"
+    hour: "11"
+    job: "cp /opt/nginx/logs/** /opt/log/"
