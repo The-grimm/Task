@@ -1,0 +1,4 @@
+-name: testing url
+ get_url:
+    url: http://{{ ipaddress }}/index.html
+    dest: /etc/temp/
