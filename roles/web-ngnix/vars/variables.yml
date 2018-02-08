@@ -1,0 +1,7 @@
+---
+nginx_conf_template: templates/index.html.j2
+nginx_conf_file_path: /usr/share/nginx/www/index.html
+nginx_index_template: templates/index.html.j2
+nginx_index_file_path: /usr/share/nginx/www/index.html
+nginx_ppa_version: stable
+nginx_ppa_use: false
