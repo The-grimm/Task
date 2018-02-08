@@ -13,6 +13,9 @@
       servive: name=nginx state=reloaded
   
   tasks:
+    - name : install nginx
+      apt: name=nginx state=present
+
     - name: Add PPA for Nginx.
       apt_repository:
         repo: 'ppa:nginx/{{ nginx_ppa_version }}'
