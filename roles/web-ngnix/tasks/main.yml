@@ -13,9 +13,6 @@
       servive: name=nginx state=reloaded
   
   tasks:
-    - name : install nginx
-      apt: name=nginx state=present
-
     - name: Add PPA for Nginx.
       apt_repository:
         repo: 'ppa:nginx/{{ nginx_ppa_version }}'
@@ -29,6 +26,16 @@
         name: nginx
         state: absent
       when: nginx_ppa_added.changed
+      
+    - name updating cache
+      apt: update_cache=yes cache_valid_time=86400
+      changed_when: false
+      
+    - name : install nginx
+      apt: 
+        name: nginx 
+        state: installed
+        default_release: stable
       
     - name: Copy index file.
       template:
